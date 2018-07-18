@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="adee08fc-d3e4-42c2-b6f6-1eecd67074b2" name="alpatel" url="http://alpatel.usersys.redhat.com">
+        <fileTransfer host="alpatel.usersys.redhat.com" port="22" rootFolder="/home/alpatel/playground/tocker" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
