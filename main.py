@@ -85,10 +85,15 @@ def run_dijkstra(pq, w, nodes):
 
 
 def print_parents(nodes, source, destination):
+    if source == destination:
+        return str(source)
+    paths = []
     for parent in nodes[destination].parents:
-        if parent == source:
-            return str(parent)
-        return print_parents(nodes, source, parent) + " " + str(parent)
+        path = print_parents(nodes, source, parent)
+        path = [p + " " + str(destination) for p in path]
+        for p in path:
+            paths.append(p)
+    return paths
 
 
 if __name__ == '__main__':
@@ -120,4 +125,4 @@ if __name__ == '__main__':
     discovered_nodes = run_dijkstra(pq, w, nodes)
     # pprint(nodes)
     print nodes[destination].distance_from_source
-    print print_parents(nodes, source, destination)
+    print min(print_parents(nodes, source, destination), key=len)
