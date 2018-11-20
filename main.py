@@ -1,5 +1,3 @@
-from pprint import pprint
-
 INFINITE = 9999
 
 
@@ -43,7 +41,7 @@ class PriorityQueue(object):
         minimum = INFINITE + 1
         minimum_element = None
         for element in self.queue:
-            if element.distance_from_source < minimum:
+            if element.distance_from_source <= minimum:
                 minimum = element.distance_from_source
                 minimum_element = element
         self.queue.remove(minimum_element)
@@ -54,7 +52,7 @@ class PriorityQueue(object):
             if element.name == node.name:
                 node.distance_from_source = c
                 node.hops += 1
-                node.add_parent(parent)
+                node.parents = [parent]
 
     def empty(self):
         if len(self.queue) == 0:
@@ -84,14 +82,25 @@ def run_dijkstra(pq, w, nodes):
     return discovered
 
 
+# def print_parents(nodes, source, destination):
+#     if source == destination:
+#         return str(source)
+#     paths = []
+#     for parent in nodes[destination].parents:
+#         path = print_parents(nodes, source, parent)
+#         path = [p + " " + str(destination) for p in path]
+#         for p in path:
+#             paths.append(p)
+#     return paths
+
 def print_parents(nodes, source, destination):
     if source == destination:
-        return str(source)
+        return [[source]]
     paths = []
     for parent in nodes[destination].parents:
         path = print_parents(nodes, source, parent)
-        path = [p + " " + str(destination) for p in path]
         for p in path:
+            p.append(destination)
             paths.append(p)
     return paths
 
@@ -106,17 +115,19 @@ if __name__ == '__main__':
     w = [[0 for _ in range(v)] for _ in range(v)]
     adjacency_list = [list() for _ in range(v)]
     for i in range(e):
-        source, destination, cost = raw_input().split(" ")
+        source, destination, cost_1 = raw_input().split(" ")
         source = int(source)
         destination = int(destination)
-        cost = int(cost)
+        cost_1 = int(cost_1)
         # if (cost < 0) or (not 1 <= source <= 50) or (not 1 <= destination <= 50):
         #     exit(2)
-        w[source][destination] = cost
-        w[destination][source] = cost
+        w[source][destination] = cost_1
+        w[destination][source] = cost_1
         nodes[source].adjacent(destination)
         nodes[destination].adjacent(source)
         adjacency_list[destination].append(source)
+        adjacency_list[source].append(destination)
+
     source, destination = raw_input().split(" ")
     source = int(source)
     nodes[source].set_cost(0)
@@ -125,4 +136,11 @@ if __name__ == '__main__':
     discovered_nodes = run_dijkstra(pq, w, nodes)
     # pprint(nodes)
     print nodes[destination].distance_from_source
-    print min(print_parents(nodes, source, destination), key=len)
+    paths = print_parents(nodes, source, destination)
+    path = min(paths, key=len)
+    minimum_length_path = len(path)
+    shortest_paths = []
+    for path in paths:
+        if len(path) == minimum_length_path:
+            shortest_paths.append(path)
+    print " ".join([str(p) for p in min(shortest_paths)])
