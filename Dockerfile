@@ -7,4 +7,3 @@ RUN yum -y install python34 python34-setuptools
 RUN easy_install-3.4 pip
 RUN pip3 install tornado
 COPY app.py /
-ENTRYPOINT ["/usr/bin/python3.4", "app.py"]
